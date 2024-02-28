@@ -1,4 +1,4 @@
-package cglibex;
+package cglibex.classes;
 
 public class Class2 implements Interface2 {
     @Override

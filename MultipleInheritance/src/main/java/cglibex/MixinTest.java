@@ -1,5 +1,8 @@
 package cglibex;
 
+import cglibex.classes.Class12;
+import cglibex.classes.Class123;
+import cglibex.classes.MixinInterface;
 import net.sf.cglib.proxy.Mixin;
 
 import java.lang.reflect.InvocationTargetException;
@@ -24,7 +27,7 @@ public class MixinTest {
         Map<Class, MixinInterface> mixins = new HashMap<>();
 
         AccessingAllClassesInPackage allClassesInPackage = new AccessingAllClassesInPackage();
-        for (var currentClass : allClassesInPackage.findAllClassesUsingClassLoader("cglibex")) {
+        for (var currentClass : allClassesInPackage.findAllClassesUsingClassLoader("cglibex.classes")) {
             if (currentClass.isAnnotationPresent(Mult.class)) {
                 Mult an = (Mult) currentClass.getAnnotation(Mult.class);
 

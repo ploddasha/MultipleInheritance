@@ -1,4 +1,4 @@
-package cglibex;
+package cglibex.classes;
 
 public class Class3 implements Interface3{
 

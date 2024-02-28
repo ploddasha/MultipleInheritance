@@ -1,4 +1,6 @@
-package cglibex;
+package cglibex.classes;
+
+import cglibex.Mult;
 
 @Mult(classes = {Class1.class, Class2.class})
 public class Class12 implements MixinInterface {
