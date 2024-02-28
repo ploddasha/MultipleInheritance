@@ -3,25 +3,25 @@ package cglibex;
 import net.sf.cglib.proxy.Mixin;
 
 import java.lang.reflect.InvocationTargetException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 /**
  * Классы читаются из аннотации.
- * Интерфейсы читаются через рефлексию, пока что с глубиной наследования 1, потом улучшим.
+ * интерфейсы читаются через рефлексию, пока что с глубиной наследования 1, потом улучшим.
  * Дальше надо сделать прокси, который будет перехватывать методы объекта-наследника
  * и заменять их на вызовы сгенерированного объекта-композиции (Mixin)
  * .
  * TODO! Сейчас поддерживается наличие только одного класса с аннотацией Mult.
  * В ближайщее время доделаю, чтобы миксины в мапу складывались (или не в мапу, тут надо подумать)
+ * .
+ * Как методы комбинировать - самое сложное, пока изучаем эту тему.
  */
 
 public class MixinTest {
 
     public static void main(String[] args) throws NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException {
 
-        MixinInterface mixinDelegate = null;
+        Map<Class, MixinInterface> mixins = new HashMap<>();
 
         AccessingAllClassesInPackage allClassesInPackage = new AccessingAllClassesInPackage();
         for (var currentClass : allClassesInPackage.findAllClassesUsingClassLoader("cglibex")) {
@@ -30,9 +30,9 @@ public class MixinTest {
 
                 List<Object> objectList = new ArrayList<>();
                 for (var superClass : an.classes()) {
-                    var con = superClass.getDeclaredConstructor();
-                    con.setAccessible(true);
-                    objectList.add(con.newInstance());
+                    var constructor = superClass.getDeclaredConstructor();
+                    constructor.setAccessible(true);
+                    objectList.add(constructor.newInstance());
                 }
                 Object[] objects = new Object[objectList.size()];
                 for (int cnt = 0; cnt < objects.length; cnt++) {
@@ -55,14 +55,16 @@ public class MixinTest {
                     interfaces,
                     objects
                 );
-
-                mixinDelegate = (MixinInterface) mixin;
+                // Вот тут сильно подумать надо как сделать универсальный конструктор миксинов.
+                mixins.put(currentClass, (MixinInterface) currentClass.getInterfaces()[0].cast(mixin));
             }
         }
 
-        assert mixinDelegate != null;
-        System.out.println(mixinDelegate.first());
-        System.out.println(mixinDelegate.second());
+        System.out.println(mixins.get(Class12.class).first());
+        System.out.println(mixins.get(Class12.class).second());
+        System.out.println(mixins.get(Class123.class).first());
+        System.out.println(mixins.get(Class123.class).second());
+        //System.out.println(mixins.get(Class123.class).third());
 
         /*
         Вот это пишет юзер.
