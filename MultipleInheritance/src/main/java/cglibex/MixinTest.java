@@ -4,11 +4,12 @@ import net.sf.cglib.proxy.Mixin;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
  * Классы читаются из аннотации.
- * TODO интерфейсы можно читать через рефлексию.
+ * Интерфейсы читаются через рефлексию, пока что с глубиной наследования 1, потом улучшим.
  * Дальше надо сделать прокси, который будет перехватывать методы объекта-наследника
  * и заменять их на вызовы сгенерированного объекта-композиции (Mixin)
  * .
@@ -23,13 +24,13 @@ public class MixinTest {
         MixinInterface mixinDelegate = null;
 
         AccessingAllClassesInPackage allClassesInPackage = new AccessingAllClassesInPackage();
-        for (var i : allClassesInPackage.findAllClassesUsingClassLoader("cglibex")) {
-            if (i.isAnnotationPresent(Mult.class)) {
-                Mult an = (Mult) i.getAnnotation(Mult.class);
+        for (var currentClass : allClassesInPackage.findAllClassesUsingClassLoader("cglibex")) {
+            if (currentClass.isAnnotationPresent(Mult.class)) {
+                Mult an = (Mult) currentClass.getAnnotation(Mult.class);
 
                 List<Object> objectList = new ArrayList<>();
-                for (var x : an.classes()) {
-                    var con = x.getDeclaredConstructor();
+                for (var superClass : an.classes()) {
+                    var con = superClass.getDeclaredConstructor();
                     con.setAccessible(true);
                     objectList.add(con.newInstance());
                 }
@@ -38,8 +39,20 @@ public class MixinTest {
                     objects[cnt] = objectList.get(cnt);
                 }
 
+                List<Class> interfacesList = new ArrayList<>();
+
+                for (var currentInterface : currentClass.getInterfaces()) {
+                    interfacesList.addAll(Arrays.asList(currentInterface.getInterfaces()));
+                    interfacesList.add(currentInterface);
+                }
+
+                Class[] interfaces = new Class[interfacesList.size()];
+                for (int i = 0; i < interfaces.length; i++) {
+                    interfaces[i] = interfacesList.get(i);
+                }
+
                 Mixin mixin = Mixin.create(
-                    new Class[]{ Interface1.class, Interface2.class, MixinInterface.class },
+                    interfaces,
                     objects
                 );
 
