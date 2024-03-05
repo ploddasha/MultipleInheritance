@@ -1,28 +1,21 @@
 package cglibex;
 
-import cglibex.classes.Class1;
 import cglibex.classes.Class12;
 import cglibex.classes.Class123;
 import cglibex.classes.MixinInterface;
-import net.sf.cglib.proxy.Enhancer;
-import net.sf.cglib.proxy.InvocationHandler;
-import net.sf.cglib.proxy.MethodInterceptor;
-import net.sf.cglib.proxy.Mixin;
 
 import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.util.*;
+import java.util.Map;
 
 /**
- * Классы читаются из аннотации.
- * интерфейс читается через рефлексию
- * Дальше надо сделать прокси, который будет перехватывать методы объекта-наследника
- * и заменять их на вызовы сгенерированного объекта-композиции (Mixin)
+ * Супер классы читаются из аннотации.
+ * Интерфейс читается через рефлексию.
+ * Пользовательские объекты создаются через ObjectsFactory
+ * Методы, вызываемые у пользовательских объектов, перехватываются прокси и вместо них
+ * срабатывают методы соответствующего объекта-миксина.
+ * Сейчас мы упёрлись в комбинирование методов - в миксин попадает только по одному экземплляру каждого метода.
  * .
- * TODO! Сейчас поддерживается наличие нескольких классов с аннотацией Mult, но все они имплементируют один интерфейс.
- * Надо
- * .
- * Как методы комбинировать - самое сложное, пока изучаем эту тему.
+ * TODO Пока что мы не генерируем рутовый класс, а надо бы.
  */
 
 public class MixinTest {
