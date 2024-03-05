@@ -3,9 +3,13 @@ package cglibex;
 import cglibex.classes.Class12;
 import cglibex.classes.Class123;
 import cglibex.classes.MixinInterface;
+import net.sf.cglib.proxy.Enhancer;
+import net.sf.cglib.proxy.InvocationHandler;
+import net.sf.cglib.proxy.MethodInterceptor;
 import net.sf.cglib.proxy.Mixin;
 
 import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.*;
 
 /**
@@ -14,8 +18,8 @@ import java.util.*;
  * Дальше надо сделать прокси, который будет перехватывать методы объекта-наследника
  * и заменять их на вызовы сгенерированного объекта-композиции (Mixin)
  * .
- * TODO! Сейчас поддерживается наличие только одного класса с аннотацией Mult.
- * В ближайщее время доделаю, чтобы миксины в мапу складывались (или не в мапу, тут надо подумать)
+ * TODO! Сейчас поддерживается наличие нескольких классов с аннотацией Mult, но все они имплементируют один интерфейс.
+ * Надо
  * .
  * Как методы комбинировать - самое сложное, пока изучаем эту тему.
  */
@@ -24,52 +28,26 @@ public class MixinTest {
 
     public static void main(String[] args) throws NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException {
 
-        Map<Class, MixinInterface> mixins = new HashMap<>();
+        Map<Class, MixinInterface> mixins = MixinsFactory.start();
+        ObjectsFactory classesFactory = new ObjectsFactory(mixins);
 
-        AccessingAllClassesInPackage allClassesInPackage = new AccessingAllClassesInPackage();
-        for (var currentClass : allClassesInPackage.findAllClassesUsingClassLoader("cglibex.classes")) {
-            if (currentClass.isAnnotationPresent(Mult.class)) {
-                Mult an = (Mult) currentClass.getAnnotation(Mult.class);
+        Class12 userProxy = (Class12) classesFactory.makeClass(Class12.class);
+        Class123 class123 = (Class123) classesFactory.makeClass(Class123.class);
 
-                List<Object> objectList = new ArrayList<>();
-                for (var superClass : an.classes()) {
-                    var constructor = superClass.getDeclaredConstructor();
-                    constructor.setAccessible(true);
-                    objectList.add(constructor.newInstance());
-                }
-                Object[] objects = new Object[objectList.size()];
-                for (int cnt = 0; cnt < objects.length; cnt++) {
-                    objects[cnt] = objectList.get(cnt);
-                }
+        System.out.println(userProxy.first());
+        System.out.println(userProxy.second());
+        System.out.println(class123.first());
+        System.out.println(class123.second());
 
-                List<Class> interfacesList = new ArrayList<>();
 
-                for (var currentInterface : currentClass.getInterfaces()) {
-                    interfacesList.addAll(Arrays.asList(currentInterface.getInterfaces()));
-                    interfacesList.add(currentInterface);
-                }
-
-                Class[] interfaces = new Class[interfacesList.size()];
-                for (int i = 0; i < interfaces.length; i++) {
-                    interfaces[i] = interfacesList.get(i);
-                }
-
-                Mixin mixin = Mixin.create(
-                    interfaces,
-                    objects
-                );
-                // Вот тут сильно подумать надо как сделать универсальный конструктор миксинов.
-                mixins.put(currentClass, (MixinInterface) currentClass.getInterfaces()[0].cast(mixin));
-            }
-        }
-
-        System.out.println(mixins.get(Class12.class).first());
-        System.out.println(mixins.get(Class12.class).second());
-        System.out.println(mixins.get(Class123.class).first());
-        System.out.println(mixins.get(Class123.class).second());
+        //System.out.println(mixins.get(Class12.class).first());
+        //System.out.println(mixins.get(Class12.class).second());
+        //System.out.println(mixins.get(Class123.class).first());
+        //System.out.println(mixins.get(Class123.class).second());
         //System.out.println(mixins.get(Class123.class).third());
 
         /*
+        Это были мои мечты, на самом деле всё немного грустнее, но может сейчас получится чего.
         Вот это пишет юзер.
         Но вместо этих методов через прокси вызываются аналогичные методы из mixinDelegate.
 
