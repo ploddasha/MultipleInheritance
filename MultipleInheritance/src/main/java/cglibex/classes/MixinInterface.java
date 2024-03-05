@@ -1,4 +1,9 @@
 package cglibex.classes;
 
-public interface MixinInterface extends Interface1, Interface2 {
+public interface MixinInterface {
+
+    String first();
+
+    String second();
+
 }

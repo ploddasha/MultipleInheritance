@@ -1,5 +1,6 @@
 package cglibex;
 
+import cglibex.classes.Class1;
 import cglibex.classes.Class12;
 import cglibex.classes.Class123;
 import cglibex.classes.MixinInterface;
@@ -14,7 +15,7 @@ import java.util.*;
 
 /**
  * Классы читаются из аннотации.
- * интерфейсы читаются через рефлексию, пока что с глубиной наследования 1, потом улучшим.
+ * интерфейс читается через рефлексию
  * Дальше надо сделать прокси, который будет перехватывать методы объекта-наследника
  * и заменять их на вызовы сгенерированного объекта-композиции (Mixin)
  * .

@@ -28,12 +28,7 @@ public class MixinsFactory {
                     objects[cnt] = objectList.get(cnt);
                 }
 
-                List<Class> interfacesList = new ArrayList<>();
-
-                for (var currentInterface : currentClass.getInterfaces()) {
-                    interfacesList.addAll(Arrays.asList(currentInterface.getInterfaces()));
-                    interfacesList.add(currentInterface);
-                }
+                List<Class> interfacesList = new ArrayList<>(List.of(currentClass.getInterfaces()));
 
                 Class[] interfaces = new Class[interfacesList.size()];
                 for (int i = 0; i < interfaces.length; i++) {
