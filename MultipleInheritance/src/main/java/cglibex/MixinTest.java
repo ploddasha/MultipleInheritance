@@ -28,6 +28,8 @@ public class MixinTest {
 
     public static void main(String[] args) throws NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException {
 
+        // User code
+
         Map<Class, MixinInterface> mixins = MixinsFactory.start();
         ObjectsFactory classesFactory = new ObjectsFactory(mixins);
 
@@ -39,22 +41,6 @@ public class MixinTest {
         System.out.println(class123.first());
         System.out.println(class123.second());
 
-
-        //System.out.println(mixins.get(Class12.class).first());
-        //System.out.println(mixins.get(Class12.class).second());
-        //System.out.println(mixins.get(Class123.class).first());
-        //System.out.println(mixins.get(Class123.class).second());
-        //System.out.println(mixins.get(Class123.class).third());
-
-        /*
-        Это были мои мечты, на самом деле всё немного грустнее, но может сейчас получится чего.
-        Вот это пишет юзер.
-        Но вместо этих методов через прокси вызываются аналогичные методы из mixinDelegate.
-
-        Class12 class12 = new Class12();
-        class12.first();
-        class12.second();
-         */
 
     }
 
