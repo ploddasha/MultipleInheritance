@@ -1,18 +1,15 @@
 package cglibex;
 
 import cglibex.classes.Class12;
-import cglibex.classes.MixinInterface;
-import net.sf.cglib.proxy.Callback;
 import net.sf.cglib.proxy.Enhancer;
 import net.sf.cglib.proxy.MethodInterceptor;
 
 import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public class CompObjFactory {
+public class CompositionsFactory {
 
     public Object makeObject(Class<?> clazz) throws InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
         Composition composition = new Composition(Class12.class);
