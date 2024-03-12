@@ -9,6 +9,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+/**
+ * Через эту фабрику пользователь создаёт свои мульти-объекты.
+ * Пользователь получает наружу Object и приводит его к корневому интерфейсу: (RootInterface) obj
+ * При вызове методов этого обхекта срабатывает описанный в данном классе прокси, перехватывающий методы
+ * и запускающий обход по супер-классам.
+ * ..С точки зрения архитектуры создание прокси можно в отдельный класс вынести.
+ */
 public class CompositionsFactory {
 
     public Object makeObject(Class<?> clazz) throws InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {

@@ -4,6 +4,9 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Класс-композиция для создания и хранения экземпляров каждого супер-класса.
+ */
 public class Composition {
 
     public Map<Class<?>, Object> composition;
