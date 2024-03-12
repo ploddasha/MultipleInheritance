@@ -1,21 +1,24 @@
 package cglibex;
 
 import cglibex.classes.Class12;
-import cglibex.classes.Class123;
 import cglibex.classes.MixinInterface;
 
 import java.lang.reflect.InvocationTargetException;
-import java.util.Map;
 
 /**
- * Супер классы читаются из аннотации.
- * Интерфейс читается через рефлексию.
- * Пользовательские объекты создаются через ObjectsFactory
- * Методы, вызываемые у пользовательских объектов, перехватываются прокси и вместо них
- * срабатывают методы соответствующего объекта-миксина.
- * Сейчас мы упёрлись в комбинирование методов - в миксин попадает только по одному экземплляру каждого метода.
- * .
- * TODO Пока что мы не генерируем рутовый класс, а надо бы.
+ * Пользователь создаёт класс, имплементирующий rootInterface (у нас он называется MixinInterface,
+ * наверное лучше его переименовать).
+ * В аннотиции указывает суперклассы, от которых он хочет наследоваться.
+ * Через CompositionsFactory пользователь создаёт объект своего класса:
+ * var x = (MixinInterface) objFactory.makeObject(Class12.class);
+ * ..PS Может когда-нибудь я научусь перегружать пользовательский конструктор.
+ * Под капотом создаётся объект-композиция из всех супер-классов и
+ * над этой композицией делается прокси-обёртка, которая при вызове метода у пользовательского объекта
+ * вызывает этот метод у каждого объекта в композиции.
+ * TODO Пока хорошо работает только для методов с возвращаемым значением void.
+ * TODO И костыльно для String. Для всех остальных методов будет падать, там ещё надо подумать.
+ * TODO Обход не в ширину а рандомный, но теоретически это не сложно доделать.
+ * Пока что мы не генерируем рутовый класс, а надо бы (может и не надо).
  */
 
 public class MixinTest {
@@ -24,18 +27,18 @@ public class MixinTest {
 
         // User code
 
-        Map<Class, MixinInterface> mixins = MixinsFactory.start();
-        ObjectsFactory classesFactory = new ObjectsFactory(mixins);
+        CompositionsFactory objFactory = new CompositionsFactory();
 
-        Class12 userProxy = (Class12) classesFactory.makeClass(Class12.class);
-        Class123 class123 = (Class123) classesFactory.makeClass(Class123.class);
+        var x = (MixinInterface) objFactory.makeObject(Class12.class);
+        x.first();
+        System.out.println(x.second());
 
-        System.out.println(userProxy.first());
-        System.out.println(userProxy.second());
-        System.out.println(class123.first());
-        System.out.println(class123.second());
+ /*       Map<Class<?>, Object> mixins = MixinsFactory.start("cglibex.classes");
+        ObjectsFactory objectsFactory = new ObjectsFactory(mixins);
 
-
+        Class12 userProxy = (Class12) objectsFactory.makeObject(Class12.class);
+        Class123 class123 = (Class123) objectsFactory.makeObject(Class123.class);
+*/
     }
 
 }

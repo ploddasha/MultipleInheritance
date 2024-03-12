@@ -8,11 +8,11 @@ import java.util.*;
 
 public class MixinsFactory {
 
-    public static Map<Class, MixinInterface> start() throws NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException {
-        Map<Class, MixinInterface> mixins = new HashMap<>();
+    public static Map<Class<?>, Object> start(String packageName) throws NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException {
+        Map<Class<?>, Object> mixins = new HashMap<>();
 
         AccessingAllClassesInPackage allClassesInPackage = new AccessingAllClassesInPackage();
-        for (var currentClass : allClassesInPackage.findAllClassesUsingClassLoader("cglibex.classes")) {
+        for (var currentClass : allClassesInPackage.findAllClassesUsingClassLoader(packageName)) {
 
             if (currentClass.isAnnotationPresent(Mult.class)) {
                 Mult an = (Mult) currentClass.getAnnotation(Mult.class);
@@ -30,7 +30,7 @@ public class MixinsFactory {
 
                 List<Class> interfacesList = new ArrayList<>(List.of(currentClass.getInterfaces()));
 
-                Class[] interfaces = new Class[interfacesList.size()];
+                Class<?>[] interfaces = new Class[interfacesList.size()];
                 for (int i = 0; i < interfaces.length; i++) {
                     interfaces[i] = interfacesList.get(i);
                 }
@@ -40,7 +40,7 @@ public class MixinsFactory {
                     objects
                 );
                 // Вот тут сильно подумать надо как сделать универсальный конструктор миксинов.
-                mixins.put(currentClass, (MixinInterface) currentClass.getInterfaces()[0].cast(mixin));
+                mixins.put(currentClass,  currentClass.getInterfaces()[0].cast(mixin));
             }
         }
 

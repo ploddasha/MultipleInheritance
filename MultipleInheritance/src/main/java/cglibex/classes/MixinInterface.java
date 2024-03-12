@@ -2,7 +2,7 @@ package cglibex.classes;
 
 public interface MixinInterface {
 
-    String first();
+    void first();
 
     String second();
 

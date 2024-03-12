@@ -6,6 +6,14 @@ import java.io.InputStreamReader;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+/**
+ * Ковырялка для нахождения всех классов в package.
+ * Как то так получилось, что в данный момент это никак не используется,
+ * так как ответственность за создание мульти-объектов лежит на пользователе.
+ * Но вообще штука прикольная, может пригодиться ещё.
+ * .
+ * Принимает на вход имя package. Возвращает сет всех классов в этом package.
+ */
 public class AccessingAllClassesInPackage {
 
     public Set<Class> findAllClassesUsingClassLoader(String packageName) {

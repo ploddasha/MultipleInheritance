@@ -8,8 +8,8 @@ public class Class3 implements Interface3{
     }
 
     @Override
-    public String first() {
-        return null;
+    public void first() {
+
     }
 
     @Override

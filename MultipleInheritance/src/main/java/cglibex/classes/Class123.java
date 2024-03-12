@@ -6,8 +6,7 @@ import cglibex.Mult;
 public class Class123 implements MixinInterface{
 
     @Override
-    public String first() {
-        return null;
+    public void first() {
     }
 
     @Override

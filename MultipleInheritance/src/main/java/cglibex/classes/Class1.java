@@ -7,8 +7,8 @@ public class Class1 implements Interface1 {
     }
 
     @Override
-    public String first() {
-        return "first behaviour";
+    public void first() {
+        System.out.println("First method of first class");
     }
 
     @Override
