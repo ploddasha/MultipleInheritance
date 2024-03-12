@@ -9,7 +9,7 @@ import java.util.Map;
 
 /**
  * Супер классы читаются из аннотации.
- * Интерфейс читается через рефлексию.
+ * интерфейс читается через рефлексию.
  * Пользовательские объекты создаются через ObjectsFactory
  * Методы, вызываемые у пользовательских объектов, перехватываются прокси и вместо них
  * срабатывают методы соответствующего объекта-миксина.
@@ -22,19 +22,19 @@ public class MixinTest {
 
     public static void main(String[] args) throws NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException {
 
+
         // User code
 
-        Map<Class, MixinInterface> mixins = MixinsFactory.start();
-        ObjectsFactory classesFactory = new ObjectsFactory(mixins);
+        Map<Class<?>, Object> mixins = MixinsFactory.start("cglibex.classes");
+        ObjectsFactory objectsFactory = new ObjectsFactory(mixins);
 
-        Class12 userProxy = (Class12) classesFactory.makeClass(Class12.class);
-        Class123 class123 = (Class123) classesFactory.makeClass(Class123.class);
+        Class12 userProxy = (Class12) objectsFactory.makeObject(Class12.class);
+        Class123 class123 = (Class123) objectsFactory.makeObject(Class123.class);
 
         System.out.println(userProxy.first());
         System.out.println(userProxy.second());
-        System.out.println(class123.first());
-        System.out.println(class123.second());
-
+        //System.out.println(class123.first());
+        //System.out.println(class123.second());
 
     }
 

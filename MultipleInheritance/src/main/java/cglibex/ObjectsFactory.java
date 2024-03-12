@@ -9,10 +9,10 @@ import java.util.Objects;
 
 public class ObjectsFactory {
 
-    private Map<Class, MixinInterface> mixins;
+    private Map<Class<?>, Object> mixins;
     private MethodInterceptor handler;
 
-    public ObjectsFactory(Map<Class, MixinInterface> mix) {
+    public ObjectsFactory(Map<Class<?>, Object> mix) {
         mixins = mix;
 
         handler = (obj, method , arguments, proxy) -> {
@@ -28,7 +28,7 @@ public class ObjectsFactory {
         };
     }
 
-    public Object makeClass(Class clazz) {
+    public Object makeObject(Class<?> clazz) {
         return Enhancer.create(clazz, handler);
     }
 
