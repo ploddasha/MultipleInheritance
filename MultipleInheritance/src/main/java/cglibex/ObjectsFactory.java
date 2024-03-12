@@ -12,8 +12,8 @@ public class ObjectsFactory {
     private Map<Class<?>, Object> mixins;
     private MethodInterceptor handler;
 
-    public ObjectsFactory(Map<Class<?>, Object> mix) {
-        mixins = mix;
+    public ObjectsFactory(Map<Class<?>, Object> mixes) {
+        mixins = mixes;
 
         handler = (obj, method , arguments, proxy) -> {
 
