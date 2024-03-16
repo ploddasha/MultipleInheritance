@@ -1,6 +1,5 @@
 package cglibex;
 
-import cglibex.classes.Class12;
 import net.sf.cglib.proxy.Enhancer;
 import net.sf.cglib.proxy.MethodInterceptor;
 
@@ -19,7 +18,7 @@ import java.util.Objects;
 public class CompositionsFactory {
 
     public Object makeObject(Class<?> clazz) throws InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
-        Composition composition = new Composition(Class12.class);
+        Composition composition = new Composition(clazz);
 
         List<Object> methodList = new ArrayList<>();
 
@@ -52,6 +51,11 @@ public class CompositionsFactory {
                 return str.substring(0, str.length() - 1);
             }
             else {
+                for (var met : composition.rootInterface.getClass().getDeclaredMethods()) {
+                    if (met.getName().equals(method.getName())) {
+                        return met.invoke(composition.rootInterface, arguments);
+                    }
+                }
                 return method.toString();
             }
         };

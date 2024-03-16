@@ -1,11 +1,11 @@
 package cglibex.classes;
 
-public class Class3 implements Interface3{
+public class Class3 implements MixinInterface{//Interface3{
 
-    @Override
-    public String third() {
-        return "third behavior";
-    }
+    //@Override
+    //public String third() {
+    //    return "third behavior";
+    //}
 
     @Override
     public void first() {
