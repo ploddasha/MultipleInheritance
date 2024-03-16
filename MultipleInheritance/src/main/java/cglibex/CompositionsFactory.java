@@ -24,10 +24,15 @@ public class CompositionsFactory {
 
         MethodInterceptor handler = (obj, method, arguments, proxy) -> {
             methodList.clear();
+            for (var met : composition.rootInterface.getClass().getDeclaredMethods()) {
+                if (met.getName().equals(method.getName()) && !(met.isAnnotationPresent(Useless.class))) {
+                    methodList.add(met.invoke(composition.rootInterface, arguments));
+                }
+            }
             for (var key : composition.composition.keySet()) {
                 var partOfComposition = composition.composition.get(key);
                 for (var met : partOfComposition.getClass().getDeclaredMethods()) {
-                    if (Objects.equals(met.getName(), method.getName())) {
+                    if (Objects.equals(met.getName(), method.getName()) && !(met.isAnnotationPresent(Useless.class))) {
                         if (met.getReturnType() == void.class) {
                             met.invoke(partOfComposition, arguments);
                         }
@@ -51,11 +56,6 @@ public class CompositionsFactory {
                 return str.substring(0, str.length() - 1);
             }
             else {
-                for (var met : composition.rootInterface.getClass().getDeclaredMethods()) {
-                    if (met.getName().equals(method.getName())) {
-                        return met.invoke(composition.rootInterface, arguments);
-                    }
-                }
                 return method.toString();
             }
         };

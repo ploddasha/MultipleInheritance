@@ -37,9 +37,9 @@ public class MixinTest {
         var y = (Class123) objFactory.makeObject(Class123.class);
         //y.first();
         //System.out.println(y.second());
-        System.out.println(y.third());
+        //System.out.println(y.third());
         x.first();
-        y.first();
+        //y.first();
 
  /*       Map<Class<?>, Object> mixins = MixinsFactory.start("cglibex.classes");
         ObjectsFactory objectsFactory = new ObjectsFactory(mixins);

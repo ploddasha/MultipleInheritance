@@ -1,6 +1,7 @@
 package cglibex.classes;
 
 import cglibex.Mult;
+import cglibex.Useless;
 
 @Mult(classes = {Class1.class, Class2.class})//, Class3.class})
 public class Class123 implements MixinInterface{
@@ -14,8 +15,8 @@ public class Class123 implements MixinInterface{
         return null;
     }
 
-    //@Override
+    //@Useless
     public String third() {
-        return "Not ready yet";
+        return "Unique method of 123 class";
     }
 }

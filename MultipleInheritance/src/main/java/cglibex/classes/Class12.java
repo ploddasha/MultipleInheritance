@@ -7,7 +7,7 @@ public class Class12 implements MixinInterface {
 
     @Override
     public void first() {
-
+        System.out.println("First method of 12 class");
     }
 
     @Override
