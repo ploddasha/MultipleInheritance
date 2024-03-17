@@ -8,7 +8,7 @@ import java.lang.reflect.Method;
 
 public class Main {
 
-    public static void main(String[] args) throws CannotCompileException, NotFoundException, InstantiationException, IllegalAccessException, InvocationTargetException {
+    public static void main(String[] args) throws CannotCompileException, NotFoundException, InstantiationException, IllegalAccessException, InvocationTargetException, NoSuchMethodException {
         ClassPool cp = ClassPool.getDefault();
 
         // создаем класс
@@ -40,6 +40,7 @@ public class Main {
         }
 
         // Создаем экземпляр класса A
+        // TODO: deprecated. Сейчас модно вот так: Object instance = a.getConstructor().newInstance();
         Object instance = a.newInstance();
         System.out.println(instance);
 
