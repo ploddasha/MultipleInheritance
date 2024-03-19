@@ -29,7 +29,6 @@ public class Main {
 
     public static void main(String[] args) throws NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException, CannotCompileException, NotFoundException {
 
-
         // User code
 
         CompositionsFactory objFactory = new CompositionsFactory();
