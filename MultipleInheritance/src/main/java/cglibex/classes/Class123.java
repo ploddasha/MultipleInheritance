@@ -8,6 +8,7 @@ public class Class123 implements RootInterface{
 
     @Override
     public void first() {
+        System.out.println("First method of bottom class");
     }
 
     @Override

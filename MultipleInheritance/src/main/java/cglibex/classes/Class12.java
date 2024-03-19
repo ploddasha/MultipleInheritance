@@ -16,4 +16,9 @@ public class Class12 implements RootInterface {
     public String second() {
         return null;
     }
+
+    //@Useless
+    public void newMethod() {
+        System.out.println("Мы не хотим, чтобы это вызывалось");
+    }
 }

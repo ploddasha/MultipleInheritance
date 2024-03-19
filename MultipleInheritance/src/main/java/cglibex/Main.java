@@ -2,6 +2,7 @@ package cglibex;
 
 import cglibex.classes.Class12;
 import cglibex.classes.Class123;
+import cglibex.classes.Class3;
 import cglibex.classes.RootInterface;
 import javassist.*;
 
@@ -19,8 +20,8 @@ import java.lang.reflect.InvocationTargetException;
  * Для void методов делает обход и вызывает этот метод для всех классов иерархии.
  * Для методов с возвращаемым значением возвращает результат первого найденного метода в иерархии.
  * @ Новая аннотация Useless. Помечает методы, которые должны игнорироваться при обходе.
- * TODO Обход не в ширину а рандомный, но теоретически это не сложно доделать.
- * TODO Сделать глубину поиска суперклассов при создании объекта больше 2.
+ * Обход лассов идёт в ширину, слева-направо, снизу-вверх.
+ * Глубина обхода - все пользовательские классы в иерархии.
  * Пока что мы не генерируем рутовый класс, а надо бы (может и не надо).
  */
 
@@ -34,22 +35,17 @@ public class Main {
         CompositionsFactory objFactory = new CompositionsFactory();
 
         var x = (RootInterface) objFactory.makeObject(Class12.class);
-        x.first();
-        //x.newMethod() ???
-        System.out.println(x.second());
+        //x.first();
+        //System.out.println(x.second());
+        //var x = (Class12) objFactory.makeObject(Class12.class);
+        //x.newMethod();
+        //x.first();
+        //System.out.println(x.second());
 
         var y = (Class123) objFactory.makeObject(Class123.class);
-        //y.first();
-        //System.out.println(y.second());
-        //System.out.println(y.third());
-        //x.first();
+        //y.third();
         //y.first();
 
- /*       Map<Class<?>, Object> mixins = MixinsFactory.start("cglibex.classes");
-        ObjectsFactory objectsFactory = new ObjectsFactory(mixins);
-
-        Class12 userProxy = (Class12) objectsFactory.makeObject(Class12.class);
-*/
     }
 
 }

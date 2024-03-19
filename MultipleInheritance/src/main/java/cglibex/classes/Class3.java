@@ -4,11 +4,6 @@ import cglibex.Useless;
 
 public class Class3 implements RootInterface{//Interface3{
 
-    //@Override
-    //public String third() {
-    //    return "third behavior";
-    //}
-
     @Override
     @Useless
     public void first() {
