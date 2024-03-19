@@ -34,14 +34,14 @@ public class MixinTest {
 
         CompositionsFactory objFactory = new CompositionsFactory();
 
-        var x = (MixinInterface) objFactory.makeObject(Class12.class);
-        x.first();
-        System.out.println(x.second());
+        //var x = (MixinInterface) objFactory.makeObject(Class12.class);
+        //x.first();
+        //System.out.println(x.second());
 
         var y = (Class123) objFactory.makeObject(Class123.class);
-        //y.first();
-        //System.out.println(y.second());
-        //System.out.println(y.third());
+        y.first();
+        System.out.println(y.second());
+        System.out.println(y.third());
         //x.first();
         //y.first();
 
