@@ -4,7 +4,7 @@ import cglibex.Mult;
 import cglibex.Useless;
 
 @Mult(classes = {Class1.class, Class2.class,  Class3.class})
-public class Class12 implements MixinInterface {
+public class Class12 implements RootInterface {
 
     @Override
     public void first() {

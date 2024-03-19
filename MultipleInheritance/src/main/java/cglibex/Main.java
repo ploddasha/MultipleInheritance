@@ -2,17 +2,16 @@ package cglibex;
 
 import cglibex.classes.Class12;
 import cglibex.classes.Class123;
-import cglibex.classes.MixinInterface;
+import cglibex.classes.RootInterface;
 import javassist.*;
 
 import java.lang.reflect.InvocationTargetException;
 
 /**
- * Пользователь создаёт класс, имплементирующий rootInterface (у нас он называется MixinInterface,
- * наверное лучше его переименовать).
+ * Пользователь создаёт класс, имплементирующий RootInterface
  * @ В аннотиции Mult указывает суперклассы, от которых он хочет наследоваться.
  * Через CompositionsFactory пользователь создаёт объект своего класса:
- * var x = (MixinInterface) objFactory.makeObject(Class12.class);
+ * var x = (RootInterface) objFactory.makeObject(Class12.class);
  * ..PS Может когда-нибудь я научусь перегружать пользовательский конструктор.
  * Под капотом создаётся объект-композиция из всех супер-классов и
  * над этой композицией делается прокси-обёртка, которая при вызове метода у пользовательского объекта
@@ -25,7 +24,7 @@ import java.lang.reflect.InvocationTargetException;
  * Пока что мы не генерируем рутовый класс, а надо бы (может и не надо).
  */
 
-public class MixinTest {
+public class Main {
 
     public static void main(String[] args) throws NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException, CannotCompileException, NotFoundException {
 
@@ -34,8 +33,9 @@ public class MixinTest {
 
         CompositionsFactory objFactory = new CompositionsFactory();
 
-        var x = (MixinInterface) objFactory.makeObject(Class12.class);
+        var x = (RootInterface) objFactory.makeObject(Class12.class);
         x.first();
+        //x.newMethod() ???
         System.out.println(x.second());
 
         var y = (Class123) objFactory.makeObject(Class123.class);

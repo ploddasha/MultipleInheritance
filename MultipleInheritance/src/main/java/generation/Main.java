@@ -40,8 +40,7 @@ public class Main {
         }
 
         // Создаем экземпляр класса A
-        // TODO: deprecated. Сейчас модно вот так: Object instance = a.getConstructor().newInstance();
-        Object instance = a.newInstance();
+        Object instance = a.getConstructor().newInstance();
         System.out.println(instance);
 
         // Вызываем методы класса A
