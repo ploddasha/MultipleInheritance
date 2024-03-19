@@ -22,6 +22,16 @@ public class Main {
         // создаем корневой класс
         CtClass someInterfaceRoot = cp.makeClass("generation.SomeInterfaceRoot");
 
+        // получаем методы
+        Method[] methods;
+        for (Class clazz : setOfClasses) {
+            if (clazz.isAnnotationPresent(RootInterface.class)) {
+                methods = clazz.getMethods();
+                System.out.println(methods);
+            }
+        }
+
+
         // добавляем классы, от которых хотим взять методы
         // классы mult? классы в пакете?
         for (Class clazz : setOfClasses) {
@@ -52,8 +62,8 @@ public class Main {
 
         //смотрим все методы нашего root
         Class<?> a = someInterfaceRoot.toClass();
-        Method[] methods = a.getMethods();
-        for (Method method : methods) {
+        Method[] methodsA = a.getMethods();
+        for (Method method : methodsA) {
             System.out.println(method);
         }
 
