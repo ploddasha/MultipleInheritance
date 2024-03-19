@@ -1,13 +1,9 @@
 package cglibex.classes;
 
-public class RootInterface{
+public interface RootInterface {
 
-    public String first() {
-        return null;
-    }
+    void first();
 
+    String second();
 
-    public String second() {
-        return null;
-    }
 }

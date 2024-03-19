@@ -1,8 +1,7 @@
 package cglibex;
 
 import java.lang.reflect.InvocationTargetException;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Класс-композиция для создания и хранения экземпляров каждого супер-класса.
@@ -13,19 +12,32 @@ public class Composition {
     public Object rootInterface;
 
     public Composition(Class<?> clazz) throws InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
-        composition = new HashMap<>();
+        composition = new LinkedHashMap<>();
         make(clazz);
     }
 
     public void make(Class<?> clazz) throws NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException {
+
         Mult an = clazz.getAnnotation(Mult.class);
-        for (var superClass : an.classes()) {
-            var superPumperClass = superClass.getSuperclass();
-            if (superPumperClass != null && !(superPumperClass.isInterface())) {
-                addInstance(superPumperClass);
+        List<Class<?>> superClasses = new ArrayList<>(List.of(an.classes()));
+        Set<Class<?>> supersPumpers = new HashSet<>();
+
+        while (true) {
+            for (var superClass : superClasses) {
+                var superPumperClass = superClass.getSuperclass();
+                if (superPumperClass != null && !(superPumperClass.isInterface()) && !(superPumperClass == Object.class)) {
+                    supersPumpers.add(superPumperClass);
+                }
+                addInstance(superClass);
             }
-            addInstance(superClass);
+            if (supersPumpers.isEmpty()) {
+                break;
+            }
+            superClasses.clear();
+            superClasses.addAll(supersPumpers);
+            supersPumpers.clear();
         }
+
         var constructor = clazz.getDeclaredConstructor();
         rootInterface = constructor.newInstance() ;
     }

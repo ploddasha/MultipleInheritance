@@ -1,14 +1,9 @@
 package cglibex.classes;
 
-public class Class1 extends Class0 {
-
-    private Class1() {
-
-    }
-
+public class Class0 implements RootInterface{
     @Override
     public void first() {
-        System.out.println("First method of first class");
+        System.out.println("First method of zero class");
     }
 
     @Override

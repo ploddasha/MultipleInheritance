@@ -1,6 +1,6 @@
 package cglibex;
 
-import cglibex.classes.MixinInterface;
+import cglibex.classes.RootInterface;
 import net.sf.cglib.proxy.Mixin;
 
 import java.lang.reflect.InvocationTargetException;
