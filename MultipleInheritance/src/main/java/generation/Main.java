@@ -1,39 +1,57 @@
 package generation;
 
+import cglibex.AccessingAllClassesInPackage;
 import javassist.*;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.Set;
 
 
 public class Main {
 
     public static void main(String[] args) throws CannotCompileException, NotFoundException, InstantiationException, IllegalAccessException, InvocationTargetException, NoSuchMethodException {
+        //
+        RootInterface rootInterfaceAnnotation = RootInterfacee.class.getAnnotation(RootInterface.class);
+        String packageName = rootInterfaceAnnotation.packageName();
+        AccessingAllClassesInPackage accessingAllClassesInPackage = new AccessingAllClassesInPackage();
+        Set<Class> setOfClasses = accessingAllClassesInPackage.findAllClassesUsingClassLoader(packageName);
+
         ClassPool cp = ClassPool.getDefault();
 
-        // создаем класс
-        CtClass someRoot = cp.makeClass("generation.A");
+        // создаем корневой класс
+        CtClass someInterfaceRoot = cp.makeClass("generation.SomeInterfaceRoot");
 
-        //добавляем второй класс, от которого хотим взять методы
-        cp.insertClassPath(new ClassClassPath(ClassB.class));
+        // добавляем классы, от которых хотим взять методы
+        // классы mult? классы в пакете?
+        for (Class clazz : setOfClasses) {
+            System.out.println(clazz.getName());
+            if (clazz.getName().equals("generation.ClassB")) {
+                cp.insertClassPath(new ClassClassPath(clazz));
+            }
+        }
 
-        System.out.println(new ClassClassPath(ClassB.class));
-        System.out.println(cp.get("generation.ClassB"));
-        CtClass class2 = cp.get("generation.ClassB");
+        for (Class clazz : setOfClasses) {
+            if (clazz.getName().equals("generation.ClassB")) {
+                CtClass classToAdd = cp.get(clazz.getName());
+                System.out.println(classToAdd);
 
-        // добавляем методы класса B
-        CtMethod[] methods2 = class2.getDeclaredMethods();
-        for (CtMethod method : methods2) {
-            CtMethod newMethod = new CtMethod(method.getReturnType(), method.getName(), method.getParameterTypes(), someRoot);
-            newMethod.setBody(method, null);
-            someRoot.addMethod(newMethod);
+                // добавляем методы текущего класса
+                CtMethod[] methods2 = classToAdd.getDeclaredMethods();
+                for (CtMethod method : methods2) {
+                    CtMethod newMethod = new CtMethod(method.getReturnType(), method.getName(), method.getParameterTypes(), someInterfaceRoot);
+                    newMethod.setBody(method, null);
+                    someInterfaceRoot.addMethod(newMethod);
+                }
+            }
+
         }
 
         // добавляем свои методы
-        someRoot.addMethod(CtNewMethod.make("public void myMethod() { System.out.println(\"Hello from myMethod\"); }", someRoot));
+        someInterfaceRoot.addMethod(CtNewMethod.make("public void myMethod() { System.out.println(\"Hello from myMethod\"); }", someInterfaceRoot));
 
         //смотрим все методы нашего root
-        Class<?> a = someRoot.toClass();
+        Class<?> a = someInterfaceRoot.toClass();
         Method[] methods = a.getMethods();
         for (Method method : methods) {
             System.out.println(method);
@@ -46,11 +64,11 @@ public class Main {
         // Вызываем методы класса A
         Method[] methods3 = a.getDeclaredMethods();
         for (Method method : methods3) {
-            if (method.getName().equals("myMethod")) {
+            if (method.getName().equals("myMethod") || method.getName().equals("method")) {
                 // Вызываем метод для экземпляра
                 method.invoke(instance);
-                break;
             }
+
         }
 
     }
