@@ -12,6 +12,15 @@ public class Main {
 
     public static void main(String[] args) throws CannotCompileException, NotFoundException, InstantiationException, IllegalAccessException, InvocationTargetException, NoSuchMethodException {
         //
+
+//        AccessingAllClassesInPackage allClassesInPackage = new AccessingAllClassesInPackage();
+//        var allClasses = allClassesInPackage.findAllClassesUsingClassLoader("name");
+//        for (var clazz : allClasses) {
+//            if (clazz.isAnnotationPresent(RootInterface.class)) {
+//                генерируем RootClass(clazz);
+//            }
+//        }
+
         RootInterface rootInterfaceAnnotation = RootInterfacee.class.getAnnotation(RootInterface.class);
         String packageName = rootInterfaceAnnotation.packageName();
         AccessingAllClassesInPackage accessingAllClassesInPackage = new AccessingAllClassesInPackage();
