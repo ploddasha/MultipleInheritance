@@ -18,6 +18,8 @@ public class CompositionsFactory {
     public Object makeObject(Class<?> clazz) throws InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
         Composition composition = new Composition(clazz);
 
+
+
         MethodInterceptor handler = (obj, method, arguments, proxy) -> {
 
             // Поиск метода у нижнего класса в иерархии
