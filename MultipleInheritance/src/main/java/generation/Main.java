@@ -5,6 +5,7 @@ import javassist.*;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.Map;
 import java.util.Set;
 
 
@@ -27,6 +28,9 @@ public class Main {
         Set<Class> setOfClasses = accessingAllClassesInPackage.findAllClassesUsingClassLoader(packageName);
 
         ClassPool cp = ClassPool.getDefault();
+        cp.importPackage("generation"); // Добавление импорта для пакета generation
+        cp.importPackage("java.util"); // Добавление импорта для пакета java.util
+
 
         // создаем корневой класс
         CtClass someInterfaceRoot = cp.makeClass("generation.SomeInterfaceRoot");
@@ -45,37 +49,41 @@ public class Main {
         // классы mult? классы в пакете?
         for (Class clazz : setOfClasses) {
             System.out.println(clazz.getName());
-            if (clazz.getName().equals("generation.ClassB") || clazz.getName().equals("generation.ClassC")) {
+            if (clazz.getName().equals("generation.ClassB") || clazz.getName().equals("generation.ClassC") || clazz.getName().equals("generation.OurClass")) {
                 cp.insertClassPath(new ClassClassPath(clazz));
             }
         }
 
-        cp.insertClassPath("generation.OurClass");
 
         // добавление поля со списком классов
         CtField newFieldList = CtField.make("public java.util.Map classes = new java.util.LinkedHashMap();", someInterfaceRoot);
         someInterfaceRoot.addField(newFieldList);
 
         // добавляем поле i
-        CtField newFieldI = CtField.make("private String " + "i" + " = \"" + "0" + "\";", someInterfaceRoot);
+        CtField newFieldI = CtField.make("Integer i = new Integer(0);", someInterfaceRoot);
         newFieldI.setModifiers(Modifier.PRIVATE);
         someInterfaceRoot.addField(newFieldI);
 
         // добавляем новый метод в класс callNextMethod
         // Создаем тело метода
         String methodBody = "{" +
-                "    if (\"0\".equals(i)) {" +
-                "        OurClass ourClass = new OurClass();" +
-                "        classes = ourClass.getClasses();" +
-                "    }" +
-                "    if (i != classes.length - 1) {" +
-                "        classes[i].method();" +
-                "        i++;" +
-                "    } else {" +
-                "        classes[i].method();" +
-                "        i = 0;" +
+                "    int num = 2;" +
+                "    System.out.println(num);" +
+                "    Integer zero = new Integer(0);" +
+                "    if (i.equals(zero)) {" +
+                "       System.out.println(\"hey\");" +
+                "       OurClass ourClass = new OurClass();" +
+                //"       java.util.Map<Class<?>, Object> classes = ourClass.getClasses();" +
+                //"       ClassC classC = (ClassC) classes.get(ClassC.class);" +
+                //"       classC.method();" +
                 "    }" +
                 "}";
+
+        OurClass ourClass = new OurClass();
+        Map<Class<?>, Object> classes = ourClass.getClasses();
+        ClassC classC = (ClassC) classes.get(ClassC.class);
+        classC.method();
+
 
         // Создаем метод и добавляем его в класс
         CtMethod newMethodCallNextMethod = CtNewMethod.make("public void callNextMethod() " + methodBody, someInterfaceRoot);
@@ -92,16 +100,16 @@ public class Main {
                     CtMethod newMethod = new CtMethod(method.getReturnType(), method.getName(), method.getParameterTypes(), someInterfaceRoot);
                     newMethod.setBody(method, null);
 
-                    // добавляем в конец метода (после основного тела) свою функциональность
-                    String newHello = "System.out.println(\"Hello! I am here!\");";
-                    newMethod.insertAfter(newHello);
-                    String callNextMethod = "callNextMethod();";
-                    newMethod.insertAfter(callNextMethod);
-
 
                     // добавить вызов метода посмотреть поле
                     String newMethodToAddString = "System.out.println(i);";
                     newMethod.insertAfter(newMethodToAddString);
+
+
+                    // добавляем в конец метода (после основного тела) свою функциональность
+                    String callNextMethod = "callNextMethod();";
+                    newMethod.insertAfter(callNextMethod);
+
 
 
                     // добавить вызов метода посмотреть поле
@@ -182,4 +190,18 @@ CtClass classC = cp.get("generation.ClassC");
 //CtClass fieldType = ClassPool.getDefault().get("java.lang.Integer"); // Тип нового поля
                     //CtField newField = new CtField(fieldType, "i", someInterfaceRoot);
 
+
+"{" +
+                "    if (\"0\".equals(i)) {" +
+                "        OurClass ourClass = new OurClass();" +
+                "        classes = ourClass.getClasses();" +
+                "    }" +
+                "    if (i != classes.length - 1) {" +
+                "        classes[i].method();" +
+                "        i++;" +
+                "    } else {" +
+                "        classes[i].method();" +
+                "        i = 0;" +
+                "    }" +
+                "}";
  */
