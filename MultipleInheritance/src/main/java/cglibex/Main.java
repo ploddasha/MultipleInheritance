@@ -4,7 +4,11 @@ import cglibex.classes.Class12;
 import cglibex.classes.Class123;
 import cglibex.classes.Class3;
 import cglibex.classes.RootInterface;
-import javassist.*;
+import javassist.ClassPool;
+import javassist.CtClass;
+import javassist.CtMethod;
+import javassist.bytecode.ConstPool;
+import javassist.bytecode.MethodInfo;
 
 import java.lang.reflect.InvocationTargetException;
 
@@ -27,7 +31,7 @@ import java.lang.reflect.InvocationTargetException;
 
 public class Main {
 
-    public static void main(String[] args) throws NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException, CannotCompileException, NotFoundException {
+    public static void main(String[] args) throws NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException {
 
         // User code
 
