@@ -13,6 +13,6 @@ public class Class1 extends Class0 {
 
     @Override
     public String second() {
-        return null;
+        return "Second method from first class";
     }
 }

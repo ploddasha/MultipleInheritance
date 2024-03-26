@@ -4,6 +4,7 @@ import net.sf.cglib.proxy.Enhancer;
 import net.sf.cglib.proxy.MethodInterceptor;
 
 import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Modifier;
 import java.util.Objects;
 
 /**
@@ -23,10 +24,20 @@ public class CompositionsFactory {
             boolean flag = true;
             // Поиск метода у нижнего класса в иерархии
             for (var met : composition.handle.getClass().getDeclaredMethods()) {
+                if (met.getName().equals(method.getName()) && met.isAnnotationPresent(TakeMethodFrom.class)) {
+                    var classFrom = met.getAnnotation(TakeMethodFrom.class).fromWhere();
+                    for (var subMet : composition.composition.get(classFrom).getClass().getDeclaredMethods()) {
+                        if (subMet.getName().equals(met.getName())) {
+                            return subMet.invoke(composition.composition.get(classFrom), arguments);
+                        }
+                    }
+                    throw new NoSuchMethodException("No method " + met.getName() + " in " + classFrom.getName());
+                }
                 if (met.getName().equals(method.getName()) && !(met.isAnnotationPresent(IgnoreMethod.class))) {
                     if (met.getReturnType() == void.class) {
                         met.invoke(composition.handle, arguments);
                         flag = false;
+                        break;
                     }
                     else {
                         return met.invoke(composition.handle, arguments);
@@ -41,6 +52,7 @@ public class CompositionsFactory {
                         if (met.getReturnType() == void.class) {
                             met.invoke(partOfComposition, arguments);
                             flag = false;
+                            break;
                         }
                         else {
                             return met.invoke(partOfComposition, arguments);

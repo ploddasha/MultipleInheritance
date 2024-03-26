@@ -1,7 +1,6 @@
 package cglibex;
 
 import cglibex.classes.Class12;
-import cglibex.classes.RootInterface;
 import javassist.CannotCompileException;
 import javassist.NotFoundException;
 
@@ -34,13 +33,11 @@ public class Main {
         CompositionsFactory objFactory = new CompositionsFactory();
 
         //var x = (RootInterface) objFactory.makeObject(Class12.class);
-        //x.first();
-        //System.out.println(x.second());
         var x = (Class12) objFactory.makeObject(Class12.class);
         //x.first();
-        x.newMethod();
-        //x.first();
         //System.out.println(x.second());
+        //x.newMethod();
+        //x.uniqueMethod();
 
         //var y = (Class123) objFactory.makeObject(Class123.class);
         //y.third();

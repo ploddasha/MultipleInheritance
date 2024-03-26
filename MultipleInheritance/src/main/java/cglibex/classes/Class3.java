@@ -12,7 +12,7 @@ public class Class3 implements RootInterface{//Interface3{
 
     @Override
     public String second() {
-        return null;
+        return "Second method of third class";
     }
 
 
