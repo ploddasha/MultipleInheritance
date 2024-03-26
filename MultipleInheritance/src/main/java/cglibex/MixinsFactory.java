@@ -13,8 +13,8 @@ public class MixinsFactory {
         AccessingAllClassesInPackage allClassesInPackage = new AccessingAllClassesInPackage();
         for (var currentClass : allClassesInPackage.findAllClassesUsingClassLoader(packageName)) {
 
-            if (currentClass.isAnnotationPresent(Mult.class)) {
-                Mult an = (Mult) currentClass.getAnnotation(Mult.class);
+            if (currentClass.isAnnotationPresent(MultipleInheritance.class)) {
+                MultipleInheritance an = (MultipleInheritance) currentClass.getAnnotation(MultipleInheritance.class);
 
                 List<Object> objectList = new ArrayList<>();
                 for (var superClass : an.classes()) {

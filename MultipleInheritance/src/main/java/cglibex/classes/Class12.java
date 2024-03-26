@@ -1,9 +1,10 @@
 package cglibex.classes;
 
-import cglibex.Mult;
-import cglibex.Useless;
+import cglibex.MultipleInheritance;
+import cglibex.IgnoreMethod;
+import cglibex.TakeMethodFrom;
 
-@Mult(classes = {Class1.class, Class2.class,  Class3.class})
+@MultipleInheritance(classes = {Class1.class, Class2.class,  Class3.class})
 public class Class12 implements RootInterface {
 
     @Override
@@ -12,13 +13,17 @@ public class Class12 implements RootInterface {
     }
 
     @Override
-    @Useless
+    @TakeMethodFrom(fromWhere = Class1.class)
     public String second() {
         return null;
     }
 
-    //@Useless
+    @IgnoreMethod
     public void newMethod() {
         System.out.println("Мы не хотим, чтобы это вызывалось");
+    }
+
+    public void uniqueMethod() {
+        System.out.println("Unique method of 12 class");
     }
 }

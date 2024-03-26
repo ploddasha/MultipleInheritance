@@ -8,6 +8,6 @@ public class Class2 extends Class0 {
 
     @Override
     public String second() {
-        return "second behaviour";
+        return "NULL";
     }
 }

@@ -33,6 +33,7 @@ public class AccessingAllClassesInPackage {
                 + className.substring(0, className.lastIndexOf('.')));
         } catch (ClassNotFoundException e) {
             // handle the exception
+            System.err.println("Class " + className + " in " + packageName + " not found.");
         }
         return null;
     }
