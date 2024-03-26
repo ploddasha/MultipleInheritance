@@ -1,11 +1,11 @@
 package cglibex.classes;
 
-import cglibex.Useless;
+import cglibex.IgnoreMethod;
 
 public class Class3 implements RootInterface{//Interface3{
 
     @Override
-    @Useless
+    @IgnoreMethod
     public void first() {
         System.out.println("Useless method");
     }
@@ -14,6 +14,7 @@ public class Class3 implements RootInterface{//Interface3{
     public String second() {
         return null;
     }
+
 
     public void newMethod() {
         System.out.println("New method from 3 class");

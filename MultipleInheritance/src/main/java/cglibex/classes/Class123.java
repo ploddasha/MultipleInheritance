@@ -1,9 +1,8 @@
 package cglibex.classes;
 
-import cglibex.Mult;
-import cglibex.Useless;
+import cglibex.MultipleInheritance;
 
-@Mult(classes = {Class1.class, Class2.class})//, Class3.class})
+@MultipleInheritance(classes = {Class1.class, Class2.class})//, Class3.class})
 public class Class123 implements RootInterface{
 
     @Override

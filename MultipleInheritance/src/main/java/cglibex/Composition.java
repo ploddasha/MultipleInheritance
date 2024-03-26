@@ -9,7 +9,7 @@ import java.util.*;
 public class Composition {
 
     public Map<Class<?>, Object> composition;
-    public Object rootInterface;
+    public Object handle;
 
     public Composition(Class<?> clazz) throws InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
         composition = new LinkedHashMap<>();
@@ -18,7 +18,7 @@ public class Composition {
 
     public void make(Class<?> clazz) throws NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException {
 
-        Mult an = clazz.getAnnotation(Mult.class);
+        MultipleInheritance an = clazz.getAnnotation(MultipleInheritance.class);
         List<Class<?>> superClasses = new ArrayList<>(List.of(an.classes()));
         Set<Class<?>> supersPumpers = new HashSet<>();
 
@@ -39,7 +39,7 @@ public class Composition {
         }
 
         var constructor = clazz.getDeclaredConstructor();
-        rootInterface = constructor.newInstance() ;
+        handle = constructor.newInstance() ;
     }
 
     private void addInstance(Class<?> superClass) throws NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException {

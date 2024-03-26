@@ -10,4 +10,8 @@ public class OurClass {
         classes.put(ClassC.class, classC);
         return classes;
     }
+
+    public void print() {
+        System.out.println("hello world");
+    }
 }
