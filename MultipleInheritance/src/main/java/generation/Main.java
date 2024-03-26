@@ -5,8 +5,7 @@ import javassist.*;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 
 public class Main {
@@ -29,7 +28,17 @@ public class Main {
 
         ClassPool cp = ClassPool.getDefault();
         cp.importPackage("generation"); // Добавление импорта для пакета generation
-        cp.importPackage("java.util"); // Добавление импорта для пакета java.util
+        //cp.importPackage("java.util"); // Добавление импорта для пакета java.util
+
+
+        cp.importPackage("java.util.Map");
+        cp.importPackage("java.util.LinkedHashMap");
+        cp.importPackage("java.util.List");
+        cp.importPackage("java.util.ArrayList");
+        cp.importPackage("java.lang.Class");
+        cp.importPackage("java.lang.reflect.Method");
+
+
 
 
         // создаем корневой класс
@@ -56,7 +65,11 @@ public class Main {
 
 
         // добавление поля со списком классов
-        CtField newFieldList = CtField.make("public java.util.Map classes = new java.util.LinkedHashMap();", someInterfaceRoot);
+        CtField newFieldMap = CtField.make("public java.util.Map classes = new java.util.LinkedHashMap();", someInterfaceRoot);
+        someInterfaceRoot.addField(newFieldMap);
+
+        // добавление поля со списком классов ключей
+        CtField newFieldList = CtField.make("public java.util.List keyList = new java.util.ArrayList();", someInterfaceRoot);
         someInterfaceRoot.addField(newFieldList);
 
         // добавляем поле i
@@ -67,22 +80,65 @@ public class Main {
         // добавляем новый метод в класс callNextMethod
         // Создаем тело метода
         String methodBody = "{" +
-                "    int num = 2;" +
-                "    System.out.println(num);" +
                 "    Integer zero = new Integer(0);" +
                 "    if (i.equals(zero)) {" +
                 "       System.out.println(\"hey\");" +
                 "       OurClass ourClass = new OurClass();" +
-                //"       java.util.Map<Class<?>, Object> classes = ourClass.getClasses();" +
+                "       classes = ourClass.getClasses();" +
+                "       keyList.addAll(classes.keySet());" +
+                "    }" +
+                "    int s = classes.values().size();" +
+                "    Integer size = new Integer(s);" +
+                "    if (!i.equals(size)) { " +
+                "       System.out.println(\"Мы дошли\" + size);" +
+                "       java.lang.Class cl = keyList.get(i.intValue());" +
+                "       System.out.println(\"==\" + classes.get(cl));    " +
+                "       Object classO =  classes.get(cl);" +
+                //"       java.lang.reflect.Method[] array = cl.getMethods();" +
+                /*
+                "       for (int j = 0; j < cl.getDeclaredMethods().length; j++) {" +
+                "           System.out.println(\"+++\");" +
+                "           java.lang.reflect.Method met = cl.getDeclaredMethods()[j];" +
+                "           if (met.getName().equals(\"method\")) {" +
+                "               met.invoke(classO);" +
+                "           }" +
+                "       }" + */
                 //"       ClassC classC = (ClassC) classes.get(ClassC.class);" +
                 //"       classC.method();" +
+                "       i = Integer.valueOf(i.intValue() + 1);" +
+                "       System.out.println(\"Мы дошли 2 \" + i);" +
+                "       callNextMethod();" +
+                "    } else {" +
+                "       System.out.println(\"Мы\");" +
+                "       i = Integer.valueOf(0);" +
                 "    }" +
                 "}";
 
         OurClass ourClass = new OurClass();
         Map<Class<?>, Object> classes = ourClass.getClasses();
-        ClassC classC = (ClassC) classes.get(ClassC.class);
-        classC.method();
+        List<Class<?>> keyList = new ArrayList<>();
+        keyList.addAll(classes.keySet()) ;
+
+        ClassC classC2 = (ClassC) classes.get(ClassC.class);
+        classC2.method();
+
+        Class<?> cl;
+        cl = keyList.get(0);
+        //Class<?> cl = keyList.get(0);
+        Object classO =  classes.get(cl);
+        for (int i = 0; i < cl.getMethods().length; i++) {
+            Method met = cl.getMethods()[i];
+            if (met.getName().equals("method")) {
+                System.out.println("---");
+                met.invoke(classO);
+            }
+        }
+        /*
+        for (Method met : cl.getDeclaredMethods()) {
+            if (met.getName().equals("method")) {
+                met.invoke(classO);
+            }
+        } */
 
 
         // Создаем метод и добавляем его в класс
@@ -168,7 +224,7 @@ ClassB {
 
     callNextMethod() {
         if (i == 0) {
-            OurClass ourClass = new OorClass()
+            OurClass ourClass = new OurClass()
             classes = ourClass.getClasses()
         }
         if (i != classes.size - 1) {

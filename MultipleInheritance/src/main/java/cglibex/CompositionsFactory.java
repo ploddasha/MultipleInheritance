@@ -20,6 +20,7 @@ public class CompositionsFactory {
 
 
 
+
         MethodInterceptor handler = (obj, method, arguments, proxy) -> {
 
             // Поиск метода у нижнего класса в иерархии
