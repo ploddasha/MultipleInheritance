@@ -1,6 +1,6 @@
-package cglibex.classes;
+package framework.examples;
 
-import cglibex.MultipleInheritance;
+import framework.annotations.MultipleInheritance;
 
 @MultipleInheritance(classes = {Class1.class, Class2.class})//, Class3.class})
 public class Class123 implements RootInterface{

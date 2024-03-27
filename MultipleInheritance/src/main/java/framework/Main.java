@@ -1,10 +1,6 @@
-package cglibex;
+package framework;
 
-import cglibex.classes.Class12;
-import javassist.CannotCompileException;
-import javassist.NotFoundException;
-
-import java.lang.reflect.InvocationTargetException;
+import framework.examples.Class12;
 
 
 /**
@@ -22,27 +18,22 @@ import java.lang.reflect.InvocationTargetException;
  * @ Аннотация TakeMethodFrom указывает из какого класса вызывать метод вместо обхода.
  * Обход классов идёт в ширину, слева-направо, снизу-вверх.
  * Глубина обхода - все пользовательские классы в иерархии.
- * Пока что мы не генерируем рутовый класс, а надо бы (может и не надо).
+ * Пока что мы генерируем рутовый класс, но не используем его (и так хорошо всё работает).
  */
 
 public class Main {
 
-    public static void main(String[] args) throws NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException, CannotCompileException, NotFoundException, InterruptedException {
+    public static void main(String[] args) throws Exception {
 
         // User code
 
         CompositionsFactory objFactory = new CompositionsFactory();
 
-        //var x = (RootInterface) objFactory.makeObject(Class12.class);
         var x = (Class12) objFactory.makeObject(Class12.class);
-        //x.first();
-        //System.out.println(x.second());
-        //x.newMethod();
-        //x.uniqueMethod();
-
-        //var y = (Class123) objFactory.makeObject(Class123.class);
-        //y.third();
-        //y.first();
+        x.first();
+        System.out.println(x.second());
+        x.newMethod();
+        x.uniqueMethod();
 
     }
 

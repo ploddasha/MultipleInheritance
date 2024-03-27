@@ -1,6 +1,6 @@
-package cglibex;
+package framework;
 
-import cglibex.classes.Class12;
+import framework.annotations.MultipleInheritance;
 
 import java.lang.reflect.InaccessibleObjectException;
 import java.lang.reflect.InvocationTargetException;

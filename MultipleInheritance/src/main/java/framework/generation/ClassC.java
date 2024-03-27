@@ -1,4 +1,4 @@
-package generation;
+package framework.generation;
 
 public class ClassC {
     public void method() {

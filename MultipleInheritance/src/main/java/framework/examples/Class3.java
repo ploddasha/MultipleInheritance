@@ -1,6 +1,6 @@
-package cglibex.classes;
+package framework.examples;
 
-import cglibex.IgnoreMethod;
+import framework.annotations.IgnoreMethod;
 
 public class Class3 implements RootInterface{//Interface3{
 

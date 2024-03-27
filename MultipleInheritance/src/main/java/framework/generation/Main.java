@@ -1,6 +1,6 @@
-package generation;
+package framework.generation;
 
-import cglibex.AccessingAllClassesInPackage;
+import framework.AccessingAllClassesInPackage;
 import javassist.*;
 
 import java.lang.reflect.InvocationTargetException;
@@ -27,7 +27,7 @@ public class Main {
         Set<Class> setOfClasses = accessingAllClassesInPackage.findAllClassesUsingClassLoader(packageName);
 
         ClassPool cp = ClassPool.getDefault();
-        cp.importPackage("generation"); // Добавление импорта для пакета generation
+        cp.importPackage("generation"); // Добавление импорта для пакета framework.generation
         //cp.importPackage("java.util"); // Добавление импорта для пакета java.util
 
 
@@ -42,7 +42,7 @@ public class Main {
 
 
         // создаем корневой класс
-        CtClass someInterfaceRoot = cp.makeClass("generation.SomeInterfaceRoot");
+        CtClass someInterfaceRoot = cp.makeClass("framework.generation.SomeInterfaceRoot");
 
         // получаем методы
         Method[] methods;
@@ -58,7 +58,7 @@ public class Main {
         // классы mult? классы в пакете?
         for (Class clazz : setOfClasses) {
             System.out.println(clazz.getName());
-            if (clazz.getName().equals("generation.ClassB") || clazz.getName().equals("generation.ClassC") || clazz.getName().equals("generation.OurClass")) {
+            if (clazz.getName().equals("framework.generation.ClassB") || clazz.getName().equals("framework.generation.ClassC") || clazz.getName().equals("framework.generation.OurClass")) {
                 cp.insertClassPath(new ClassClassPath(clazz));
             }
         }
@@ -146,7 +146,7 @@ public class Main {
         someInterfaceRoot.addMethod(newMethodCallNextMethod);
 
         for (Class clazz : setOfClasses) {
-            if (clazz.getName().equals("generation.ClassB")) {
+            if (clazz.getName().equals("framework.generation.ClassB")) {
                 CtClass classToAdd = cp.get(clazz.getName());
                 System.out.println(classToAdd);
 
@@ -240,7 +240,7 @@ ClassB {
 
 
 
-CtClass classC = cp.get("generation.ClassC");
+CtClass classC = cp.get("framework.generation.ClassC");
                     CtMethod newMethodToAdd = classC.getMethod("method", "()V");
 
 //CtClass fieldType = ClassPool.getDefault().get("java.lang.Integer"); // Тип нового поля

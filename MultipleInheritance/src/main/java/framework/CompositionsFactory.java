@@ -1,10 +1,11 @@
-package cglibex;
+package framework;
 
+import framework.annotations.IgnoreMethod;
+import framework.annotations.TakeMethodFrom;
 import net.sf.cglib.proxy.Enhancer;
 import net.sf.cglib.proxy.MethodInterceptor;
 
 import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Modifier;
 import java.util.Objects;
 
 /**

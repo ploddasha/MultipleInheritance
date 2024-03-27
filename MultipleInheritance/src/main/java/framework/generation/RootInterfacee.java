@@ -1,6 +1,4 @@
-package generation;
-
-import generation.RootInterface;
+package framework.generation;
 
 @RootInterface(packageName = "generation")
 public interface RootInterfacee {

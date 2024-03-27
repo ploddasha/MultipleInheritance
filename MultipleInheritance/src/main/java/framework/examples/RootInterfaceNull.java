@@ -1,4 +1,4 @@
-package cglibex.classes;
+package framework.examples;
 
 public class RootInterfaceNull{
 

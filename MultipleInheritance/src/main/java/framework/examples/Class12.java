@@ -1,8 +1,8 @@
-package cglibex.classes;
+package framework.examples;
 
-import cglibex.MultipleInheritance;
-import cglibex.IgnoreMethod;
-import cglibex.TakeMethodFrom;
+import framework.annotations.MultipleInheritance;
+import framework.annotations.IgnoreMethod;
+import framework.annotations.TakeMethodFrom;
 
 @MultipleInheritance(classes = {Class1.class, Class2.class,  Class3.class})
 public class Class12 implements RootInterface {

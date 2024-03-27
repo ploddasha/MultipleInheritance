@@ -1,4 +1,4 @@
-package cglibex.classes;
+package framework.examples;
 
 public class Class2 extends Class0 {
     @Override
