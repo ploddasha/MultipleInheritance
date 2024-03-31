@@ -1,6 +1,7 @@
 package framework.generation;
 
 import framework.AccessingAllClassesInPackage;
+import framework.annotations.RootInterface;
 import javassist.*;
 
 import java.lang.reflect.InvocationTargetException;
@@ -11,31 +12,21 @@ import java.util.*;
 public class Main {
 
     public static void main(String[] args) throws CannotCompileException, NotFoundException, InstantiationException, IllegalAccessException, InvocationTargetException, NoSuchMethodException {
-        //
 
-//        AccessingAllClassesInPackage allClassesInPackage = new AccessingAllClassesInPackage();
-//        var allClasses = allClassesInPackage.findAllClassesUsingClassLoader("name");
-//        for (var clazz : allClasses) {
-//            if (clazz.isAnnotationPresent(RootInterface.class)) {
-//                генерируем RootClass(clazz);
-//            }
-//        }
-
-        RootInterface rootInterfaceAnnotation = RootInterfacee.class.getAnnotation(RootInterface.class);
+        RootInterface rootInterfaceAnnotation = RootInterfaceExample.class.getAnnotation(RootInterface.class);
         String packageName = rootInterfaceAnnotation.packageName();
         AccessingAllClassesInPackage accessingAllClassesInPackage = new AccessingAllClassesInPackage();
         Set<Class> setOfClasses = accessingAllClassesInPackage.findAllClassesUsingClassLoader(packageName);
 
         ClassPool cp = ClassPool.getDefault();
-        cp.importPackage("generation"); // Добавление импорта для пакета framework.generation
-        //cp.importPackage("java.util"); // Добавление импорта для пакета java.util
-
+        cp.importPackage("framework.generation"); // Добавление импорта для пакета framework.generation
 
         cp.importPackage("java.util.Map");
         cp.importPackage("java.util.LinkedHashMap");
         cp.importPackage("java.util.List");
         cp.importPackage("java.util.ArrayList");
         cp.importPackage("java.lang.Class");
+        cp.importPackage("java.lang.Object");
         cp.importPackage("java.lang.reflect.Method");
 
 
@@ -55,7 +46,6 @@ public class Main {
 
 
         // добавляем классы, от которых хотим взять методы
-        // классы mult? классы в пакете?
         for (Class clazz : setOfClasses) {
             System.out.println(clazz.getName());
             if (clazz.getName().equals("framework.generation.ClassB") || clazz.getName().equals("framework.generation.ClassC") || clazz.getName().equals("framework.generation.OurClass")) {
@@ -77,12 +67,13 @@ public class Main {
         newFieldI.setModifiers(Modifier.PRIVATE);
         someInterfaceRoot.addField(newFieldI);
 
-        // добавляем новый метод в класс callNextMethod
+        // Добавляем новый метод в класс - callNextMethod
         // Создаем тело метода
+        String nameOfMethod = "method";
         String methodBody = "{" +
                 "    Integer zero = new Integer(0);" +
                 "    if (i.equals(zero)) {" +
-                "       System.out.println(\"hey\");" +
+                "       System.out.println(\"Поиск и добавление классов иерархии\");" +
                 "       OurClass ourClass = new OurClass();" +
                 "       classes = ourClass.getClasses();" +
                 "       keyList.addAll(classes.keySet());" +
@@ -90,26 +81,22 @@ public class Main {
                 "    int s = classes.values().size();" +
                 "    Integer size = new Integer(s);" +
                 "    if (!i.equals(size)) { " +
-                "       System.out.println(\"Мы дошли\" + size);" +
-                "       java.lang.Class cl = keyList.get(i.intValue());" +
-                "       System.out.println(\"==\" + classes.get(cl));    " +
-                "       Object classO =  classes.get(cl);" +
-                //"       java.lang.reflect.Method[] array = cl.getMethods();" +
-                /*
-                "       for (int j = 0; j < cl.getDeclaredMethods().length; j++) {" +
-                "           System.out.println(\"+++\");" +
-                "           java.lang.reflect.Method met = cl.getDeclaredMethods()[j];" +
-                "           if (met.getName().equals(\"method\")) {" +
-                "               met.invoke(classO);" +
+                "       java.lang.Class cl = (java.lang.Class) keyList.get(i.intValue());" +
+                "       System.out.println(\"Наш класс 2 \" + cl);    " +
+                "       Object objectO =  classes.get(cl);" +
+                "       System.out.println(\"Наш объект 2 \" + objectO);    " +
+                "       for (int j = 0; j < cl.getMethods().length; j++) {" +
+                "           java.lang.reflect.Method met = cl.getMethods()[j];" +
+                "           if (met.getName().equals(\"" + nameOfMethod + "\")) {" +
+                "                 java.lang.Object[] arguments = new java.lang.Object[0];" +
+                "                 met.invoke(objectO, arguments);" +
                 "           }" +
-                "       }" + */
-                //"       ClassC classC = (ClassC) classes.get(ClassC.class);" +
-                //"       classC.method();" +
+                "       }" +
                 "       i = Integer.valueOf(i.intValue() + 1);" +
-                "       System.out.println(\"Мы дошли 2 \" + i);" +
+                "       System.out.println(\"Переход к вызову следующего метода i = \" + i);" +
                 "       callNextMethod();" +
                 "    } else {" +
-                "       System.out.println(\"Мы\");" +
+                "       System.out.println(\"Обход завершен\");" +
                 "       i = Integer.valueOf(0);" +
                 "    }" +
                 "}";
@@ -121,16 +108,22 @@ public class Main {
 
         ClassC classC2 = (ClassC) classes.get(ClassC.class);
         classC2.method();
+        System.out.println("наш объект - " + classC2);
 
-        Class<?> cl;
+        Class cl;
         cl = keyList.get(0);
         //Class<?> cl = keyList.get(0);
-        Object classO =  classes.get(cl);
+        System.out.println("наш класс - " + cl);
+        Object objectC =  classes.get(cl);
+        System.out.println("наш объект - " + objectC);
+        var array = cl.getMethods();
+
         for (int i = 0; i < cl.getMethods().length; i++) {
             Method met = cl.getMethods()[i];
             if (met.getName().equals("method")) {
                 System.out.println("---");
-                met.invoke(classO);
+                Object[] arguments = new Object[0];
+                met.invoke(objectC, arguments);
             }
         }
         /*
