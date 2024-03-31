@@ -20,6 +20,10 @@ public class Composition {
         make(clazz);
     }
 
+    public Map<Class<?>, Object> getComposition() {
+        return composition;
+    }
+
     public void make(Class<?> clazz) throws NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException {
 
         MultipleInheritance an = clazz.getAnnotation(MultipleInheritance.class);
