@@ -29,11 +29,12 @@ public class Main {
 
         CompositionsFactory objFactory = new CompositionsFactory();
 
-        var x = (Class12) objFactory.makeObject(Class12.class);
+        String packageName = "framework.examples";
+        var x = (Class12) objFactory.makeObject(Class12.class, packageName);
         x.first();
-        System.out.println(x.second());
-        x.newMethod();
-        x.uniqueMethod();
+        //System.out.println(x.second());
+        //x.newMethod();
+        //x.uniqueMethod();
 
     }
 

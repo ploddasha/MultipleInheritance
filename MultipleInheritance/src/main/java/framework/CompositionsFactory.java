@@ -25,13 +25,10 @@ import java.util.Set;
  */
 public class CompositionsFactory {
 
-    public Object makeObject(Class<?> clazzInput) throws InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException, CannotCompileException, NotFoundException {
+    public Object makeObject(Class<?> clazzInput, String packageName) throws InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException, CannotCompileException, NotFoundException {
         Composition composition = new Composition(clazzInput);
 
         // -----------------------------------------------------------------------
-
-        String packageName = "framework.examples";
-        //Class<?> clazzInput = ClassB.class;
 
         AccessingAllClassesInPackage accessingAllClassesInPackage = new AccessingAllClassesInPackage();
         Set<Class> setOfClasses = accessingAllClassesInPackage.findAllClassesUsingClassLoader(packageName);
@@ -60,7 +57,7 @@ public class CompositionsFactory {
             if (clazz.isAnnotationPresent(RootInterface.class)) {
                 methods = clazz.getMethods();
                 for (Method met : methods) {
-                    System.out.println(met.getName());
+                    //System.out.println(met.getName());
                     methodNames.add(met.getName());
                 }
             }
@@ -96,10 +93,8 @@ public class CompositionsFactory {
                 // добавляем методы текущего класса
                 CtMethod[] methodsToAdd = classToAdd.getDeclaredMethods();
                 for (CtMethod method : methodsToAdd) {
-                    System.out.println("метод " + method.getName());
                     CtMethod newMethod = new CtMethod(method.getReturnType(), method.getName(), method.getParameterTypes(), someInterfaceRoot);
                     newMethod.setBody(method, null);
-
 
                     // -----------------------------------
                     // Добавляем новый метод в класс - callNextMethod
@@ -110,10 +105,10 @@ public class CompositionsFactory {
                             "    if (i.equals(zero)) {" +
 
                             "       OurClass ourClass = new OurClass();" +
-                            //"       Composition composition = new Composition();" +
-                            //"       composition.make(" + clazzInput.getName() + ");" +
-                            //"       classes = composition.getComposition();" +
-                            "       classes = ourClass.getClasses();" +
+                            "       Composition composition = new Composition();" +
+                            "       composition.make(\"" + clazzInput.getName() + "\");" +
+                            "       classes = composition.getComposition();" +
+                            //"       classes = ourClass.getClasses();" +
 
                             "       keyList.addAll(classes.keySet());" +
                             "    }" +
@@ -150,11 +145,8 @@ public class CompositionsFactory {
                     // добавляем новый метод в класс
                     someInterfaceRoot.addMethod(newMethod);
                 }
-
             }
-
         }
-
 
         // Создаем экземпляр корневого класса
         Class<?> root = someInterfaceRoot.toClass();

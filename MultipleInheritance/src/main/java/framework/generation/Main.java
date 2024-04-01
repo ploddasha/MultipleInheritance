@@ -138,7 +138,7 @@ public class Main {
         // Вызываем метод корневого класса
         Method[] methods3 = root.getDeclaredMethods();
         for (Method method : methods3) {
-            if (method.getName().equals("second")) {
+            if (method.getName().equals("first")) {
                 // Вызываем метод для экземпляра
                 method.invoke(instance);
             }
