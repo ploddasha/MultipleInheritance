@@ -100,8 +100,11 @@ public class CompositionsFactory {
                 CtMethod[] methodsToAdd = classToAdd.getDeclaredMethods();
                 for (CtMethod method : methodsToAdd) {
                     CtMethod newMethod = new CtMethod(method.getReturnType(), method.getName(), method.getParameterTypes(), someInterfaceRoot);
-                    newMethod.setBody(method, null);
-
+                    if (!method.hasAnnotation(IgnoreMethod.class)) {
+                        newMethod.setBody(method, null);
+                    } else {
+                        newMethod.setBody("{}");
+                    }
                     // -----------------------------------
                     // Добавляем новый метод в класс - callNextMethod
                     // Создаем тело метода
