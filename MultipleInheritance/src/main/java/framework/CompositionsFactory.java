@@ -161,12 +161,27 @@ public class CompositionsFactory {
 
             // Вызываем метод корневого класса
             Method[] methods3 = root.getDeclaredMethods();
+            //boolean flag = true;
             for (Method met : methods3) {
-                if (met.getName().equals(method.getName())) {
+                if (met.getName().equals(method.getName()) && method.isAnnotationPresent(TakeMethodFrom.class)) {
+                    var fromWhere = method.getAnnotation(TakeMethodFrom.class).fromWhere();
+                    for (var subMet : fromWhere.getDeclaredMethods()) {
+                        if (subMet.getName().equals(met.getName())) {
+                            var constructor = fromWhere.getDeclaredConstructor();
+                            constructor.setAccessible(true);
+                            return subMet.invoke(constructor.newInstance());
+                        }
+                    }
+                    throw new NoSuchMethodException("No method " + met.getName() + " in " + fromWhere.getName());
                     // Вызываем метод для экземпляра
+                    //met.invoke(instance);
+                }
+                if (met.getName().equals(method.getName()) && met.getReturnType() != void.class) {
+                    return met.invoke(instance);
+                }
+                if (met.getName().equals(method.getName())) {
                     met.invoke(instance);
                 }
-
             }
 
             // --------------------------------------------------------------------
