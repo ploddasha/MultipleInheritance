@@ -24,6 +24,12 @@ public class Composition {
         composition = new LinkedHashMap<>();
     }
 
+    public Composition(String clazz) throws InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException, ClassNotFoundException {
+        composition = new LinkedHashMap<>();
+        make(clazz);
+    }
+
+
     public Map<Class<?>, Object> getComposition() {
         return composition;
     }

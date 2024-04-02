@@ -15,7 +15,7 @@ public class Class12 implements RootInterface {
     @Override
     @TakeMethodFrom(fromWhere = Class1.class)
     public String second() {
-        return null;
+        return "null";
     }
 
     @IgnoreMethod
