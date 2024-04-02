@@ -11,7 +11,6 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.Set;
 
 /**
@@ -50,8 +49,6 @@ public class CompositionsFactory {
         cp.importPackage("framework.annotations");
         cp.importPackage("framework.annotations.IgnoreMethod");
 
-
-
         // получаем методы корневого интерфейса
         Method[] methods;
         List<String> methodNames = new ArrayList<>();
@@ -59,7 +56,6 @@ public class CompositionsFactory {
             if (clazz.isAnnotationPresent(RootInterface.class)) {
                 methods = clazz.getMethods();
                 for (Method met : methods) {
-                    //System.out.println(met.getName());
                     methodNames.add(met.getName());
                 }
             }
@@ -157,19 +153,12 @@ public class CompositionsFactory {
         Class<?> root = someInterfaceRoot.toClass();
         Object instance = root.getConstructor().newInstance();
 
-        //Method method = composition.getComposition().get(0).getClass().getMethod("first");
-//        if (!method.isAnnotationPresent(IgnoreMethod.class)) {}
-
-
         // -----------------------------------------------------------------------
 
         MethodInterceptor handler = (obj, method, arguments, proxy) -> {
 
-            // --------------------------------------------------------------------
-
-            // Вызываем метод корневого класса
+            // Собираем методы корневого класса
             Method[] methods3 = root.getDeclaredMethods();
-            //boolean flag = true;
             for (Method met : methods3) {
                 if (met.getName().equals(method.getName()) && method.isAnnotationPresent(TakeMethodFrom.class)) {
                     var fromWhere = method.getAnnotation(TakeMethodFrom.class).fromWhere();
@@ -181,7 +170,6 @@ public class CompositionsFactory {
                         }
                     }
                     throw new NoSuchMethodException("No method " + met.getName() + " in " + fromWhere.getName());
-                    // Вызываем метод для экземпляра
                 }
                 if (met.getName().equals(method.getName()) && met.getReturnType() != void.class) {
                     return met.invoke(instance);
@@ -190,53 +178,6 @@ public class CompositionsFactory {
                     met.invoke(instance);
                 }
             }
-
-            // --------------------------------------------------------------------
-
-            /*
-            boolean flag = true;
-            // Поиск метода у нижнего класса в иерархии
-            for (var met : composition.handle.getClass().getDeclaredMethods()) {
-                if (met.getName().equals(method.getName()) && met.isAnnotationPresent(TakeMethodFrom.class)) {
-                    var classFrom = met.getAnnotation(TakeMethodFrom.class).fromWhere();
-                    for (var subMet : composition.composition.get(classFrom).getClass().getDeclaredMethods()) {
-                        if (subMet.getName().equals(met.getName())) {
-                            return subMet.invoke(composition.composition.get(classFrom), arguments);
-                        }
-                    }
-                    throw new NoSuchMethodException("No method " + met.getName() + " in " + classFrom.getName());
-                }
-                if (met.getName().equals(method.getName()) && !(met.isAnnotationPresent(IgnoreMethod.class))) {
-                    if (met.getReturnType() == void.class) {
-                        met.invoke(composition.handle, arguments);
-                        flag = false;
-                        break;
-                    }
-                    else {
-                        return met.invoke(composition.handle, arguments);
-                    }
-                }
-            }
-            // Поиск метода в остальной иерархии
-            for (var key : composition.composition.keySet()) {
-                var partOfComposition = composition.composition.get(key);
-                for (var met : partOfComposition.getClass().getDeclaredMethods()) {
-                    if (Objects.equals(met.getName(), method.getName()) && !(met.isAnnotationPresent(IgnoreMethod.class))) {
-                        if (met.getReturnType() == void.class) {
-                            met.invoke(partOfComposition, arguments);
-                            flag = false;
-                            break;
-                        }
-                        else {
-                            return met.invoke(partOfComposition, arguments);
-                        }
-                    }
-                }
-            }
-            if (flag) {
-                throw new NoSuchMethodException("Method " + method.toString() + " not found. Please, check classes in MultipleInheritance annotation and their methods.");
-            }
-             */
             return method.toString();
         };
 

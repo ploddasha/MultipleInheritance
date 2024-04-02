@@ -2,7 +2,6 @@ package framework;
 
 import framework.examples.Class12;
 
-
 /**
  * Пользователь создаёт класс, имплементирующий RootInterface
  * @ В аннотиции MultipleInheritance указывает суперклассы, от которых он хочет наследоваться.
@@ -18,7 +17,7 @@ import framework.examples.Class12;
  * @ Аннотация TakeMethodFrom указывает из какого класса вызывать метод вместо обхода.
  * Обход классов идёт в ширину, слева-направо, снизу-вверх.
  * Глубина обхода - все пользовательские классы в иерархии.
- * Пока что мы генерируем рутовый класс, но не используем его (и так хорошо всё работает).
+ * Рут класс генерируем по аннотаци @RootInterface. Все тонкости реализации содержатся в нём.
  */
 
 public class Main {
@@ -31,9 +30,10 @@ public class Main {
 
         String packageName = "framework.examples";
         var x = (Class12) objFactory.makeObject(Class12.class, packageName);
-        x.first();
+        //x.first();
+
         //System.out.println(x.second());
-        //x.newMethod(); //problem
+        x.newMethod();
         //x.uniqueMethod();
 
     }

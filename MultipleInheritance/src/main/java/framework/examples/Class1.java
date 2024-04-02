@@ -15,4 +15,8 @@ public class Class1 extends Class0 {
     public String second() {
         return "Second method from first class";
     }
+
+    public void newMethod() {
+        System.out.println("New method from 1 class");
+    }
 }

@@ -16,7 +16,7 @@ public class Class3 implements RootInterface{//Interface3{
     }
 
 
-    public void newMethod() {
-        System.out.println("New method from 3 class");
-    }
+//    public void newMethod() {
+//        System.out.println("New method from 3 class");
+//    }
 }
