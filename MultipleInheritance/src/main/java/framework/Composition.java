@@ -20,6 +20,20 @@ public class Composition {
         make(clazz);
     }
 
+    public Composition() {
+        composition = new LinkedHashMap<>();
+    }
+
+    public Composition(String clazz) throws InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException, ClassNotFoundException {
+        composition = new LinkedHashMap<>();
+        make(clazz);
+    }
+
+
+    public Map<Class<?>, Object> getComposition() {
+        return composition;
+    }
+
     public void make(Class<?> clazz) throws NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException {
 
         MultipleInheritance an = clazz.getAnnotation(MultipleInheritance.class);
@@ -44,6 +58,34 @@ public class Composition {
 
         var constructor = clazz.getDeclaredConstructor();
         handle = constructor.newInstance() ;
+    }
+
+    public void make(String className) throws NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException, ClassNotFoundException {
+        Class<?> clazz = Class.forName(className);
+
+        MultipleInheritance an = clazz.getAnnotation(MultipleInheritance.class);
+        List<Class<?>> superClasses = new ArrayList<>(List.of(an.classes()));
+        Set<Class<?>> supersPumpers = new HashSet<>();
+
+        while (true) {
+            for (var superClass : superClasses) {
+                var superPumperClass = superClass.getSuperclass();
+                if (superPumperClass != null && !(superPumperClass.isInterface()) && !(superPumperClass == Object.class) && !(Modifier.isAbstract(superPumperClass.getModifiers()))) {
+                    supersPumpers.add(superPumperClass);
+                }
+                addInstance(superClass);
+            }
+            if (supersPumpers.isEmpty()) {
+                break;
+            }
+            superClasses.clear();
+            superClasses.addAll(supersPumpers);
+            supersPumpers.clear();
+        }
+
+        var constructor = clazz.getDeclaredConstructor();
+        handle = constructor.newInstance() ;
+
     }
 
     private void addInstance(Class<?> superClass) throws NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException {
