@@ -31,9 +31,9 @@ public class Main {
 
         String packageName = "framework.examples";
         var x = (Class12) objFactory.makeObject(Class12.class, packageName);
-        x.first();
+        //x.first();
         //System.out.println(x.second());
-        //x.newMethod();
+        x.newMethod();
         //x.uniqueMethod();
 
     }
