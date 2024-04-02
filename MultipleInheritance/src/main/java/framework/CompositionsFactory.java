@@ -3,7 +3,6 @@ package framework;
 import framework.annotations.IgnoreMethod;
 import framework.annotations.RootInterface;
 import framework.annotations.TakeMethodFrom;
-import framework.generation.ClassB;
 import javassist.*;
 import net.sf.cglib.proxy.Enhancer;
 import net.sf.cglib.proxy.MethodInterceptor;
@@ -48,6 +47,9 @@ public class CompositionsFactory {
 
         cp.importPackage("framework.generation.OurClass");
         cp.importPackage("framework.Composition");
+        cp.importPackage("framework.annotations");
+        cp.importPackage("framework.annotations.IgnoreMethod");
+
 
 
         // получаем методы корневого интерфейса
@@ -71,6 +73,10 @@ public class CompositionsFactory {
 
         // создаем корневой класс
         CtClass someInterfaceRoot = cp.makeClass("framework.generation.SomeInterfaceRoot");
+
+        // добавление поля со списком классов иерархии
+        CtField newFieldComposition = CtField.make("public Composition composition = new Composition(\"" + clazzInput.getName() + "\");", someInterfaceRoot);
+        someInterfaceRoot.addField(newFieldComposition);
 
         // добавление поля со списком классов иерархии
         CtField newFieldMap = CtField.make("public java.util.Map classes = new java.util.LinkedHashMap();", someInterfaceRoot);
@@ -103,13 +109,7 @@ public class CompositionsFactory {
                     String methodBody = "{" +
                             "    Integer zero = new Integer(0);" +
                             "    if (i.equals(zero)) {" +
-
-                            "       OurClass ourClass = new OurClass();" +
-                            "       Composition composition = new Composition();" +
-                            "       composition.make(\"" + clazzInput.getName() + "\");" +
                             "       classes = composition.getComposition();" +
-                            //"       classes = ourClass.getClasses();" +
-
                             "       keyList.addAll(classes.keySet());" +
                             "    }" +
                             "    int s = classes.values().size();" +
@@ -120,8 +120,10 @@ public class CompositionsFactory {
                             "       for (int j = 0; j < cl.getMethods().length; j++) {" +
                             "           java.lang.reflect.Method met = cl.getMethods()[j];" +
                             "           if (met.getName().equals(\"" + nameOfMethod + "\")) {" +
-                            "                 java.lang.Object[] arguments = new java.lang.Object[0];" +
-                            "                 met.invoke(objectO, arguments);" +
+                            "                 if (!met.isAnnotationPresent(IgnoreMethod.class)) {" +
+                            "                   java.lang.Object[] arguments = new java.lang.Object[0];" +
+                            "                   met.invoke(objectO, arguments);" +
+                            "                 }" +
                             "           }" +
                             "       }" +
                             "       i = Integer.valueOf(i.intValue() + 1);" +
@@ -152,6 +154,9 @@ public class CompositionsFactory {
         Class<?> root = someInterfaceRoot.toClass();
         Object instance = root.getConstructor().newInstance();
 
+        //Method method = composition.getComposition().get(0).getClass().getMethod("first");
+//        if (!method.isAnnotationPresent(IgnoreMethod.class)) {}
+
 
         // -----------------------------------------------------------------------
 
@@ -174,7 +179,6 @@ public class CompositionsFactory {
                     }
                     throw new NoSuchMethodException("No method " + met.getName() + " in " + fromWhere.getName());
                     // Вызываем метод для экземпляра
-                    //met.invoke(instance);
                 }
                 if (met.getName().equals(method.getName()) && met.getReturnType() != void.class) {
                     return met.invoke(instance);
